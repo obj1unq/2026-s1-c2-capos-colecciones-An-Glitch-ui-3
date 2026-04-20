@@ -12,7 +12,7 @@ describe "testDeCastillo" {
 	test "Ejemplos de la 1.2: Castillo de Piedra " {
 		rolando.encontroElArtefacto(espadaDelDestino)
 		rolando.encontroElArtefacto(libroDeHechizos)
-		rolando.llegarAlCastillo()
+		rolando.llegarA()
 		rolando.encontroElArtefacto(collarDivino)
 
 		const eee = {rolando.mochila()}
