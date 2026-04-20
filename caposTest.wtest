@@ -1,0 +1,26 @@
+import capos.*
+
+
+
+// Rolando encuentra la espada del destino (la recolecta)
+// Rolando encuentra el libro de hechizos (la recolecta)
+// Rolando llega al castillo de piedra (deja en el castillo la espada y el libro de hechizos)
+// Rolando encuentra el collar divino (ahora si lo puede recolectar, ya que liberó espacio)
+// Rolando llega al castillo de piedra nuevamente (deja el collar, con lo cual ahora el castillo tiene el collar, la espada y el libro)
+describe "testDeCastillo" {
+    
+	test "Ejemplos de la 1.2: Castillo de Piedra " {
+		rolando.encontroElArtefacto(espadaDelDestino)
+		rolando.encontroElArtefacto(libroDeHechizos)
+		rolando.llegarAlCastillo()
+		rolando.encontroElArtefacto(collarDivino)
+
+		const eee = {rolando.mochila()}
+		const inventario = eee.apply()
+
+
+        assert.equals(#{"Collar Divino", "Espada del Destino", "Libro de Hechizos"}, eee)
+	}
+
+	
+}
