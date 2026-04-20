@@ -1,23 +1,43 @@
 //   PARTE 1 - REFERENCIAS
 // ====================================== PERSONAJES ==========================================
 object rolando {
-const mochila = #{}
+  var mochila = 2
+  const inventario = #{}
 
 
-method encontroElArtefacto(artefacto) {
+  method mochila(tamaño) {
+    mochila = tamaño
+  }
+
+  method encontroElArtefacto(artefacto) {
     self.sePuedeAgregar(artefacto)
-    mochila.add(artefacto)
-}
+    inventario.add(artefacto)
+  }
 
-method sePuedeAgregar(artefacto) {
-    if (mochila.size() >= 3){
+  method sePuedeAgregar(artefacto) {
+    if (inventario.size() == mochila){
         self.error("No hay espacio suficiente en la mochila.")
     }
-}
+  }
 
-method inventario() {
-  return mochila
-}
+  method inventario() {
+    return inventario
+  }
+  // cosas agregadas del ej 1.2
+  method llegarAlCastillo() {
+    //castillo.depositar(inventario)     ---> así no funciona
+    inventario.forEach({ artefacto => castillo.depositar(artefacto) })
+    inventario.clear()
+  }
+
+  // cosas agregadas del 1.4
+  method todasLasPosesiones() {
+    return inventario.addAll(castillo.almacen())      // const resultado = inventario.union(castillo.almacen())          ??
+  }
+
+  method tieneElArtefacto(artefactoBuscado) {
+    return self.todasLasPosesiones().any({artefacto => artefacto == artefactoBuscado})
+  }
 }
 
 // ======================================== ARTEFACTOS =============================================
@@ -42,5 +62,19 @@ object collarDivino {
 object armaduraDeAceroValyrio {
   method armadura() {
     return "Armadura de Acero Valyrio"
+  }
+}
+
+// ============================================= CASTILLO ================================================
+object castillo {
+  const almacen = #{}
+
+
+  method almacen() {
+    return almacen
+  } 
+
+  method depositar(artefacto) {
+    almacen.add(artefacto)
   }
 }
