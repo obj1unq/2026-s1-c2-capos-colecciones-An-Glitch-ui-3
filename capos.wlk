@@ -1,7 +1,6 @@
 //   PARTE 1 - REFERENCIAS
 // ====================================== PERSONAJES ==========================================
 object rolando {
-  var morada = castillo
   var capacidadMaxDeLaMochila = 2
   const mochila = #{}
   var poderDePelea = 5         // agregado del punto 2
@@ -30,15 +29,10 @@ object rolando {
     return mochila
   }
 
-  method morada(lugar) {
-    morada = lugar
-  }
-
-
   // cosas agregadas del ej 1.2
   method llegarA() {
-    //mochila.forEach({ artefacto => morada.depositar(artefacto) })        // con el setter la morada cambiaría...
-    morada.depositar(mochila)
+    //mochila.forEach({ artefacto => castillo.depositar(artefacto) })        // con el setter la morada cambiaría...
+    castillo.depositar(mochila)
     mochila.clear()
   }
 
