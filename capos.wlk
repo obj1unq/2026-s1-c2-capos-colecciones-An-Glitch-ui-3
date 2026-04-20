@@ -23,6 +23,7 @@ object rolando {
   method inventario() {
     return inventario
   }
+
   // cosas agregadas del ej 1.2
   method llegarAlCastillo() {
     //castillo.depositar(inventario)     ---> así no funciona
@@ -30,13 +31,18 @@ object rolando {
     inventario.clear()
   }
 
-  // cosas agregadas del 1.4
+  // cosas agregadas del 1.3
   method todasLasPosesiones() {
     return inventario.addAll(castillo.almacen())      // const resultado = inventario.union(castillo.almacen())          ??
   }
 
   method tieneElArtefacto(artefactoBuscado) {
     return self.todasLasPosesiones().any({artefacto => artefacto == artefactoBuscado})
+  }
+
+  // cosas agregadas del 1.4
+  method historia() {
+    return inventario.addAll(castillo.almacen())   // faltan las cosas que te encontraste en el camino y no pudiste meter en la mochila...
   }
 }
 
