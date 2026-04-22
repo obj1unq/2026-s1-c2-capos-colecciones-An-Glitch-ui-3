@@ -3,8 +3,8 @@
 object rolando {
   var capacidadMaxDeLaMochila = 2
   const mochila = #{}
-  var poderDePelea = 5         // agregado del punto 2
-  var yaPeleo = false
+  const poderBase = 5         // agregado del punto 2
+  //var poderPelea = poderBase      // agregado del punto 2
 
 
   method capacidad(tamaño) {
@@ -31,7 +31,7 @@ object rolando {
 
   // cosas agregadas del ej 1.2
   method llegarA() {
-    //mochila.forEach({ artefacto => castillo.depositar(artefacto) })        // con el setter la morada cambiaría...
+    //mochila.forEach({ artefacto => morada.depositar(artefacto) })        // con el setter la morada cambiaría...
     castillo.depositar(mochila)
     mochila.clear()
   }
@@ -42,7 +42,7 @@ object rolando {
   }
 
   method tieneElArtefacto(artefactoBuscado) {
-    return self.todasLasPosesiones().any({artefacto => artefacto == artefactoBuscado})
+    return self.todasLasPosesiones().any {artefacto => artefacto == artefactoBuscado}
   }
 
   // cosas agregadas del 1.4
@@ -51,24 +51,25 @@ object rolando {
   }
 
   // cosas del punto 2
-  method poder() {
-    return poderDePelea
+  method poderBase() {
+    return poderBase
   }
 
-  method poderCalculado() {
-    //poderDePelea = poderDePelea + self.mochila().map()
-    if (not yaPeleo) {
-      poderDePelea = poderDePelea + (mochila.map({artefacto => artefacto.poder()})).sum()     // el poder base cuando se pelea por primera vez
-    } else {
-        poderDePelea = (poderDePelea + 1) + (mochila.map({artefacto => artefacto.poderCalculado()})).sum()     // el poder calculado de cada artefacto después de la 1° pelea
-        yaPeleo = true
-    }
+  method poderPelea() {    //---------------------------> poder de pelea
+    return poderBase + (mochila.map({artefacto => artefacto.poder()})).sum()     // el poder base cuando se pelea por primera vez
+  }
+
+  // ????????????
+  method pelearBatalla() {
+    (poderBase + 1) + (mochila.map({artefacto => artefacto.poder()})).sum() 
+    //return self.poderPelea() + (poderBase + 1) + (mochila.map({artefacto => artefacto.poderCalculado()})).sum() 
   }
 }
-
+          //  method artefactoMasPoderosoDeLaMorada { return morada.artefactoaMasPoderoso(self) }
+          //  method artefactoMasPoderoso(personaje) { return artefacto.max({a = a.poder(personaje)}) }
 // ======================================== ARTEFACTOS =============================================
 object espadaDelDestino {
-  var poderQueBrinda = rolando.poder()
+  var yaFueUsado = false
 
 
   method espada() {
@@ -76,39 +77,35 @@ object espadaDelDestino {
   }
 
   method poder() {
-    return poderQueBrinda
+    return if (not yaFueUsado) {
+      rolando.poderBase()
+  } else {
+    rolando.poderBase() / 2
+    yaFueUsado = true
   }
-
-  method poderCalculado() {
-    poderQueBrinda = (poderQueBrinda * 50) / 100
-  }
-}
-
-object libroDeHechizos {
-  method libro() {
-    return "Libro de Hechizos"
   }
 }
 
 object collarDivino {
-  var poderQueBrinda = 3
+  const poderQueBrinda = 3
+  var cantDeUsos = 0
 
 
   method collar() {
     return "Collar Divino"
   }
 
-  method poderCalculado(personaje) {               // ?????????
-    if (not (personaje.poder() > 6)){
-      // poderQueBrinda + 1 punto por c/ batalla
-      poderQueBrinda + 1
+  method poder() {               // ?????????
+    return if (rolando.poderBase() > 6){
+      poderQueBrinda + cantDeUsos
+      //cantDeUsos = 1 + cantDeUsos
     } else {
-      poderQueBrinda
-    }
+        poderQueBrinda
+      }
   }
 
-  method poder() {
-    return poderQueBrinda 
+  method usos() {
+    cantDeUsos = cantDeUsos + 1
   }
 }
 
@@ -120,7 +117,7 @@ object armaduraDeAceroValyrio {
     return "Armadura de Acero Valyrio"
   }
 
-  method poderCalculado() {      // nombre que no va
+  method poder() { 
     return poderQueBrinda
   }
 }
@@ -140,3 +137,33 @@ object castillo {
 }
 
 // Parte 2  -  Mensajes con Bloques
+object bendicion {
+  method poder(){ 
+    return 4 
+  } 
+}
+
+object invisibilidad { 
+  method poder(personaje){ 
+    return personaje.poderBase() 
+  } 
+}
+
+object invocacion { 
+  method poder(personaje){ 
+    return personaje.morada().artefactoMasPoderoso(personaje).poder()    // morada = castillo
+  } 
+}
+
+
+//===============================
+object libroDeHechizos {
+  var poderQueBrinda = 0
+  const hechizos = []
+
+
+  method libro() {
+    return "Libro de Hechizos"
+  }
+}
+//===============================
