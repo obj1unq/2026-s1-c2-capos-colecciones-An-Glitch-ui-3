@@ -18,8 +18,27 @@ describe "testDeCastillo" {
 	}
 }
 
-        assert.equals(#{"Collar Divino", "Espada del Destino", "Libro de Hechizos"}, eee)
-	}
+describe "test" {
+  test "calcular el poder de rolando" {
+	rolando.capacidad(3)
+	rolando.encontroElArtefacto(espadaDelDestino)
+	rolando.encontroElArtefacto(collarDivino)
+	rolando.encontroElArtefacto(armaduraDeAceroValyrio)
+	rolando.pelearBatalla()
 
-	
+	assert.equals(20, rolando.poderPelea())
+  }
+}
+
+describe "test2" {
+  test "calcular el poder de rolando luego de una batalla" {
+	rolando.capacidad(3)
+	rolando.encontroElArtefacto(espadaDelDestino)
+	rolando.encontroElArtefacto(collarDivino)
+	rolando.encontroElArtefacto(armaduraDeAceroValyrio)
+	rolando.pelearBatalla()
+	rolando.pelearBatalla()
+
+	assert.equals(20, rolando.poderPelea())
+  }
 }
