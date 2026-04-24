@@ -6,6 +6,7 @@ object rolando {
   var morada = castillo
   var poderBase = 5         // agregado del punto 2
   //var poderPelea = poderBase      // agregado del punto 2
+  const enemigos = [caterina, archibaldo, astra]
 
 
   method capacidad(tamaño) {
@@ -67,6 +68,33 @@ object rolando {
   method pelearBatalla() {
     mochila.forEach({ artefacto => artefacto.usarse() })
     poderBase = poderBase + 1
+  }
+
+  // cosas agregadad del 2.3
+  method enemigosPuedeVencer() {
+    return [enemigos].filter({pj => self.poderPelea() > pj.poder()})
+  }
+
+  method moradasConquistables() {
+    return self.enemigosPuedeVencer().map({pj => pj.viveEn()})
+  }
+
+  // cosas agregadas del 2.4
+  method esPoderoso() {
+    return self.enemigosPuedeVencer().size() == 3
+  }
+
+  // cosas agregadas del 2.5
+  method artefactoFatal(enemigo) {
+    return if (self.tieneArtefactoFatalPara(enemigo)){
+      mochila.find({art => (self.poderBase() + art.poderPara(self)) > enemigo.poder()})
+    } else {
+      self.error(" Rolando no cuenta con un artefacto fatal :( ")
+    }
+  }
+
+  method tieneArtefactoFatalPara(enemigo) {
+    return mochila.any({art => (self.poderBase() + art.poderPara(self)) > enemigo.poder()})
   }
 }
 
@@ -216,6 +244,7 @@ object invocacion {
 
 // ==================================== ENEMIGOS ======================================
 object caterina {
+
   method poder() {
     return 28
   }
@@ -226,6 +255,7 @@ object caterina {
 }
 
 object archibaldo {
+
   method poder() {
     return 16
   }
@@ -236,6 +266,7 @@ object archibaldo {
 }
 
 object astra {
+
   method poder() {
     return 14
   }
