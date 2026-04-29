@@ -70,9 +70,9 @@ object rolando {
     poderBase = poderBase + 1
   }
 
-  // cosas agregadad del 2.3
+  // cosas agregadas del 2.3
   method enemigosPuedeVencer() {
-    return [enemigos].filter({pj => self.poderPelea() > pj.poder()})
+    return enemigos.filter({pj => self.poderPelea() > pj.poderPelea()})
   }
 
   method moradasConquistables() {
@@ -86,15 +86,10 @@ object rolando {
 
   // cosas agregadas del 2.5
   method artefactoFatal(enemigo) {
-    return if (self.tieneArtefactoFatalPara(enemigo)){
-      mochila.find({art => (self.poderBase() + art.poderPara(self)) > enemigo.poder()})
-    } else {
-      self.error(" Rolando no cuenta con un artefacto fatal :( ")
-    }
-  }
-
-  method tieneArtefactoFatalPara(enemigo) {
-    return mochila.any({art => (self.poderBase() + art.poderPara(self)) > enemigo.poder()})
+    return mochila.findOrElse(
+      { art => (self.poderBase() + art.poderPara(self)) > enemigo.poderPelea() },
+      { self.error("Rolando no cuenta con un artefacto fatal :( ") }
+    )
   }
 }
 
@@ -102,10 +97,6 @@ object rolando {
 object espadaDelDestino {
   var yaFueUsado = false
 
-
-  method espada() {
-    return "Espada del Destino"
-  }
 
   method poderPara(personaje) {
     return if (not yaFueUsado) {
@@ -126,10 +117,6 @@ object collarDivino {
   var cantDeUsos = 0
 
 
-  method collar() {
-    return "Collar Divino"
-  }
-
   method poderPara(personaje) {
     return if (personaje.poderBase() > 6){
       poderQueBrinda + cantDeUsos
@@ -148,10 +135,6 @@ object armaduraDeAceroValyrio {
   const poderQueBrinda = 6
 
 
-  method armadura() {
-    return "Armadura de Acero Valyrio"
-  }
-
   method poderPara(personaje) {
     return poderQueBrinda
   }
@@ -165,10 +148,6 @@ object libroDeHechizos {
   //var poderQueBrinda = 0
   const hechizos = []
 
-
-  method libro() {
-    return "Libro de Hechizos"
-  }
 
   method poderPara(personaje) {
     //return hechizos.size()
@@ -212,20 +191,12 @@ object bendicion {
   method poderPara(personaje){ 
     return 4 
   } 
-
-  method bendicion() {
-    return "Hechizo de Bendición"
-  }
 }
 
 object invisibilidad { 
   method poderPara(personaje){ 
     return personaje.poderBase() 
   } 
-
-  method invisibilidad() {
-    return "Hechizo de Invisibilidad"
-  }
 }
 
 object invocacion { 
@@ -233,10 +204,6 @@ object invocacion {
     //return personaje.morada().artefactoMasPoderoso(personaje).poder()      // morada = castillo
     return (castillo.artefactoMasPoderoso(personaje)).poderPara(personaje)
   } 
-
-  method invocacion() {
-    return "Hechizo de Invocación"
-  }
 }
 
           //  method artefactoMasPoderosoDeLaMorada { return morada.artefactoMasPoderoso(self) }
@@ -245,33 +212,71 @@ object invocacion {
 // ==================================== ENEMIGOS ======================================
 object caterina {
 
-  method poder() {
+  method poderPelea() {
     return 28
   }
 
   method viveEn() {
-    return "Fortaleza de Acero"
+    return fortalezaDeAcero
   } 
 }
-
 object archibaldo {
 
-  method poder() {
+  method poderPelea() {
     return 16
   }
 
   method viveEn() {
-    return "Palacio de Mármol"
+    return palacioDeMarmol
   } 
 }
-
 object astra {
 
-  method poder() {
+  method poderPelea() {
     return 14
   }
 
   method viveEn() {
-    return "Torre de Marfil"
+    return torreDeMarfil
   } 
+}
+
+// ========================= VIVIENDAS ========================
+object fortalezaDeAcero {
+  var dueñx = caterina
+
+
+  method acaVive() {
+    return dueñx
+  }
+
+  method propietario(unDueñx) {
+    dueñx = unDueñx
+  }
+}
+
+object palacioDeMarmol {
+  var dueñx = archibaldo
+
+
+  method acaVive() {
+    return dueñx
+  }
+
+  method propietario(unDueñx) {
+    dueñx = unDueñx
+  }
+}
+
+object torreDeMarfil {
+  var dueñx = astra
+
+
+  method acaVive() {
+    return dueñx
+  }
+
+  method propietario(unDueñx) {
+    dueñx = unDueñx
+  }
 }
